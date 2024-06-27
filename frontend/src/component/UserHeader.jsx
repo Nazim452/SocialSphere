@@ -17,7 +17,7 @@ const UserHeader = ({user}) => {
   const currentUser = useRecoilValue(userAtom)//logged in user
   // user.followers.includes(currentUser._id) is an expression that checks if the currentUser._id exists in the followers array of the user object.
   const [following,setFollowing] = useState(user.followers.includes(currentUser?._id));
-  console.log(following);
+  // console.log(following);
   const [updating,setUpdating] = useState(false);
 
   const showToast = useShowToast();

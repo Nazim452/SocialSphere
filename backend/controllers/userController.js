@@ -1,106 +1,11 @@
 import User from "../model/userModel.js";
 import bcrypt from 'bcryptjs'
 // import generateTokenAndSetCookies from "../utils/helpers/generateTokenANdSetCookie.js";
-import generateTokenAndSetCookies from "../utils/helpers/generateTokenAndSetCookie.js";
+import generateTokenAndSetCookies from "../utils/helpers/genTokenSetCookie.js";
 
 import {v2 as cloudinary} from 'cloudinary';
 import mongoose from "mongoose";
 import Post from "../model/postModel.js";
-
-// export const signupUser = async(req,res)=>{
-
-//     try {
-
-//         const {name,email,username,password} = req.body;
-
-//         const user = await User.findOne({$or:[{email},{username}]});
-//         if(user){
-//             return res.status(400).json({error:"User Already exists"})
-
-//         }
-
-//         const salt = await bcrypt.genSalt(10);
-//         const  hashedPassword = await bcrypt.hash(password, salt);
-
-//         const newUser = new User({
-//             name,
-//             email,
-//             username,
-//             password:hashedPassword,
-
-//         })
-//         await newUser.save();
-
-//         if(newUser){
-//             generateTokenAndSetCookies(newUser._id,res);
-//             res.status(201).json({
-//                 message:"Successfully user created",
-//                 id:newUser._id,
-//                 name:newUser.name,
-//                 email:newUser.email,
-//                 username:newUser.username,
-//                 bio:newUser.bio,
-//                 profilePic:newUser.profilePic,
-//             })
-//         }
-//         else{
-//             res.status(404).json({message:"Invalid user data"})
-//         }
-
-        
-//     } catch (error) {
-//         res.status(500).json({error:error.message})
-//         console.log("Error in Signup: " + error);
-        
-//     }
-
-// }
-
-
-
-
-// export const loginUser = async (req, res) => {
-//     try {
-//         const { username, password } = req.body;
-
-//         // Verify username and password are provided
-//         if (!username || !password) {
-//             return res.status(400).json({ error: "Username and password are required" });
-//         }
-
-//         // Find user by username
-//         const user = await User.findOne({ username });
-
-//         // Check if user exists
-//         if (!user) {
-//             return res.status(400).json({ error: "Invalid username or password" });
-//         }
-
-//         // Compare passwords
-//         const isPasswordCorrect = await bcrypt.compare(password, user.password);
-
-//         if (!isPasswordCorrect) {
-//             return res.status(400).json({ error: "Invalid username or password" });
-//         }
-
-//         // Generate token and set cookies
-//         generateTokenAndSetCookies(user._id, res);
-
-//         // Respond with user data
-//         res.status(200).json({
-//             _id: user._id,
-//             name: user.name,
-//             email: user.email,
-//             username: user.username,
-//             bio: user.bio,
-//             profilePic:user.profilePic,
-//         });
-//     } catch (error) {
-//         // Handle any errors
-//         console.log("Error in loginUser: ", error.message);
-//         res.status(500).json({ error: "Internal server error" });
-//     }
-// };
 
 
 

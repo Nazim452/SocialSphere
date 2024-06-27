@@ -31,6 +31,14 @@ const Header = () => {
           </Link>
         </Flex>
       )}
+
+
+
+      <p  style={{
+        fontSize:"20px"
+      }}>SnapCircle</p>
+
+
       {!user && (
         <Flex>
           <Link 
