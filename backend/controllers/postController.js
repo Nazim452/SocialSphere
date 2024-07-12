@@ -177,7 +177,7 @@ export const replyToPost = async (req, res) => {
 
         if (!text) return res.status(404).json({ error: "Text is required" });
         const post = await Post.findById(postId);
-        if (!post) res.status(404).json({ error: "Post not found" });
+        if (!post) return res.status(404).json({ error: "Post not found" });
         //kon sa username wala kon se text, kon se pic ke sath reply kar raha hai
 
         const reply = { userId, text, userProfilePic, username };
@@ -200,7 +200,7 @@ export const getFeedPost = async (req, res) => {
     try {
         const userId = req.user._id;
         const user = await User.findById(userId);
-        if (!user) res.status(404).json({ error: "User not found" });
+        if (!user) return res.status(404).json({ error: "User not found" });
 
         const following = user.following; //find the following of the user
         const feedPost = await Post.find({ postedBy: { $in: following } });

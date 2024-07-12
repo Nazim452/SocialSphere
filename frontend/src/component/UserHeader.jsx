@@ -107,7 +107,7 @@ const UserHeader = ({user}) => {
                 base:"xs",
                 md:"sm",
                 lg:"md"
-              }} bg={"gray.dark"} color={"gray.light"} p={1} borderRadius={"full"}>threads.next</Text>
+              }} bg={"gray.dark"} color={"gray.light"} p={1} borderRadius={"full"}>SnapCircle</Text>
 
           </Flex>
         </Box>
