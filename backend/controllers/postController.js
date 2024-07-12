@@ -2,93 +2,93 @@ import User from "../model/userModel.js";
 import Post from "../model/postModel.js";
 import { v2 as cloudinary } from 'cloudinary';
 
-// export const createPost = async (req, res) => {
-//     try {
-//         const { postedBy, text } = req.body;
-//         let { img } = req.body;
-
-//         if (!postedBy || !text) return res.status(404).json({ error: "PostedBy & text filed is required" });
-
-
-//         //jo post karna chhata hai uski id nikalo
-//         const user = await User.findById(postedBy);
-
-//         if (!user) return res.status(404).json({ error: "User not found" });
-//         // koi kisi dusre ke id se post nahi karega
-//         if (user._id.toString() !== req.user._id.toString()) return res.status(404).json({ message: "Unauthorized creating post" });
-
-
-//         if (img) {
-//             const uploadedResponse = await cloudinary.uploader.upload(img);
-//             img = uploadedResponse.secure_url;
-
-
-//         }
-
-
-
-
-//         const maxLength = 500;
-//         if (text.length > maxLength) return res.status(404).json({ error: `Text must be less than ${maxLength} characters` });
-
-//         const newPost = new Post({ postedBy, text, img });
-//         await newPost.save();
-//         return res.status(201).json(newPost);
-
-
-
-
-//     } catch (error) {
-//         console.log("error creating post", error);
-//         res.status(404).json({ error: "Error in CreatePost" })
-
-//     }
-
-// }
-
 export const createPost = async (req, res) => {
-	try {
-		const { postedBy, text } = req.body;
-        console.log("Request body of post", req.body);
-		let { img } = req.body;
+    try {
+        const { postedBy, text } = req.body;
+        let { img } = req.body;
 
-		if (!postedBy ) {
-			return res.status(400).json({ error: "Postedby  are required" });
-		}
+        if (!postedBy || !text) return res.status(404).json({ error: "PostedBy & text filed is required" });
 
-        if(!text){
-            return res.status(400).json({ error: "Text  are required" });
+
+        //jo post karna chhata hai uski id nikalo
+        const user = await User.findById(postedBy);
+
+        if (!user) return res.status(404).json({ error: "User not found" });
+        // koi kisi dusre ke id se post nahi karega
+        if (user._id.toString() !== req.user._id.toString()) return res.status(404).json({ message: "Unauthorized creating post" });
+
+
+        if (img) {
+            const uploadedResponse = await cloudinary.uploader.upload(img);
+            img = uploadedResponse.secure_url;
+
 
         }
 
-		const user = await User.findById(postedBy);
-		// if (!user) {
-		// 	return res.status(404).json({ error: "User not found" });
-		// }
 
-		if (user._id.toString() !== req.user._id.toString()) {
-			return res.status(401).json({ error: "Unauthorized to create post" });
-		}
 
-		const maxLength = 500;
-		if (text.length > maxLength) {
-			return res.status(400).json({ error: `Text must be less than ${maxLength} characters` });
-		}
 
-		if (img) {
-			const uploadedResponse = await cloudinary.uploader.upload(img);
-			img = uploadedResponse.secure_url;
-		}
+        const maxLength = 500;
+        if (text.length > maxLength) return res.status(404).json({ error: `Text must be less than ${maxLength} characters` });
 
-		const newPost = new Post({ postedBy, text, img });
-		await newPost.save();
+        const newPost = new Post({ postedBy, text, img });
+        await newPost.save();
+        return res.status(201).json(newPost);
 
-		res.status(201).json({newPost});
-	} catch (err) {
-		res.status(500).json({ error: err.message });
-		console.log(err);
-	}
-};
+
+
+
+    } catch (error) {
+        console.log("error creating post", error);
+        res.status(404).json({ error: "Error in CreatePost" })
+
+    }
+
+}
+
+// export const createPost = async (req, res) => {
+// 	try {
+// 		const { postedBy, text } = req.body;
+//         console.log("Request body of post", req.body);
+// 		let { img } = req.body;
+
+// 		if (!postedBy ) {
+// 			return res.status(400).json({ error: "Postedby  are required" });
+// 		}
+
+//         if(!text){
+//             return res.status(400).json({ error: "Text  are required" });
+
+//         }
+
+// 		const user = await User.findById(postedBy);
+// 		// if (!user) {
+// 		// 	return res.status(404).json({ error: "User not found" });
+// 		// }
+
+// 		if (user._id.toString() !== req.user._id.toString()) {
+// 			return res.status(401).json({ error: "Unauthorized to create post" });
+// 		}
+
+// 		const maxLength = 500;
+// 		if (text.length > maxLength) {
+// 			return res.status(400).json({ error: `Text must be less than ${maxLength} characters` });
+// 		}
+
+// 		if (img) {
+// 			const uploadedResponse = await cloudinary.uploader.upload(img);
+// 			img = uploadedResponse.secure_url;
+// 		}
+
+// 		const newPost = new Post({ postedBy, text, img });
+// 		await newPost.save();
+
+// 		res.status(201).json({newPost});
+// 	} catch (err) {
+// 		res.status(500).json({ error: err.message });
+// 		console.log(err);
+// 	}
+// };
 export const getPost = async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
@@ -230,15 +230,5 @@ export const getUserPosts = async (req, res) => {
 
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 

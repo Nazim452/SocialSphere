@@ -152,56 +152,7 @@ export const followUnfollowUser= async(req,res)=>{
 }
 
 
-// export const updateUser =async(req,res)=>{
-//     const {name,email,username,password,bio} = req.body;
-//     let {profilePic} = req.body;
 
-//     const userId = req.user._id;
-//     try {
-
-//         let user = await User.findById(userId);
-//         if(!user)  res.status(404).json({error:"User not found"})
-
-//         //can't update other user profile
-//         //userId is object in protected route  - so we have convert into String
-//         if(req.params.id!==userId.toString()) return  res.status(404).json({error:"You can't update other user profile"})
-
-//         if(password){
-//             const salt= await bcrypt.genSalt(10);
-//             const hashedPassword = await bcrypt.hash(password,salt);
-//             user.password = hashedPassword;
-
-//         }
-//         if(profilePic){
-//             //if already have pic then we deleting prev  pic
-//             if(user.profilePic){
-//                 //give id for delete
-//                 await cloudinary.uploader.destroy(user.profilePic.split("/").pop().split(".")[0]);
-//             }
-//             const uploadedResponse = await cloudinary.uploader.upload(profilePic);
-//             // uploadedResponse -  return a response
-//             profilePic = uploadedResponse.secure_url;
-//         }
-//         // if name want to update then  name otherwise take previos username.name
-//         user.name = name|| user.name;
-//         user.email = email||user.email;
-//         user.username = username||  user.username;
-//         user.profilePic = profilePic||user.profilePic;
-//         user.bio = bio||user.bio;
-
-//         user = await user.save();
-//         res.status(200).json({message:"Profile update",user});
-
-
-        
-        
-//     } catch (error) {
-//         res.status(404).json({error:"Error in Update User"})
-//         console.log("Error in Update User: " +error);
-
-        
-//     }
-// }
 
 
 export const updateUser = async (req, res) => {
@@ -310,36 +261,7 @@ export const getAlluser = async(req,res)=>{
 }
 
 
-// export const allUserReply = async(req,res)=>{
-// 	try {
-// 		const userId = req.user._id;
-		
-// 		let user = await User.findById(userId);
-// 		const allReply = await Post.find(
-// 			{ "replies.userId": userId },
-// 			{
-// 				$set: {
-// 					"replies.$[reply].username": user.username,
-// 					"replies.$[reply].userProfilePic": user.profilePic,
-// 				},
-// 			},
-// 			{ arrayFilters: [{ "reply.userId": userId }] }
-// 		);
 
-// 		res.status(200).send({
-// 			message:"All reply fetchded successfully.",
-// 			allReply,
-
-// 		})
-		
-// 	} catch (error) {
-// 		console.log("Error in getting all user reply",error);
-// 		res.status(404).json({error:"Error in getting all user reply",error: error});       
-
-
-		
-// 	}
-// }
 
 export  const getSuggestedUsers = async (req, res) => {
 	try {
@@ -384,14 +306,6 @@ export  const freezeAccount = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
-
-
-
-
-
-
-
-
 
 
 

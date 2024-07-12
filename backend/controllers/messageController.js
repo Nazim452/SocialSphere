@@ -53,7 +53,6 @@ async function sendMessage(req, res) {
 
 		res.status(201).json(newMessage);
 	} catch (error) {
-		
 		res.status(500).json({ error: error.message });
 	}
 }
@@ -69,8 +68,6 @@ async function getMessages(req, res) {
 		if (!conversation) {
 			return res.status(404).json({ error: "Conversation not found" });
 		}
-
-		// Searching in messages model  with the help ogf conversation _id
 
 		const messages = await Message.find({
 			conversationId: conversation._id,

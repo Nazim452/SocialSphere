@@ -5,7 +5,7 @@ import  jwt from "jsonwebtoken";
 
         const token = req.cookies.jwt;  // fetching token form the response of cookies - name we given jwt in generateTokenAndSetCookies;
 
-        if(!token)res.status(401).json({message:"UnAuthorized"});
+        if(!token) return res.status(401).json({message:"UnAuthorized"});
 
         const decoded = jwt.verify(token,process.env.JWT_SECRET);
         //cheking in Data Model wether user exist or not
