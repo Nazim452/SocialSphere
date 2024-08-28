@@ -10,12 +10,10 @@ const AllUser = () => {
     const [users, setUsers] = useState({ alluser: [] });
 
 
+    // Nazim  in Main Branch for All user  
+    // Nazim  in Main Branch for All user   - Advanced Auth
 
-
-
-
-
-    const fetchAllUsers = async () => {
+const fetchAllUsers = async () => {
         try {
             const res = await fetch("/api/users", {
                 method: 'GET',
