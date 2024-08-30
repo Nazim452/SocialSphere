@@ -6,7 +6,9 @@
     transition: background-color 0.3s ease-in-out;
 }
 
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 .icon-container:hover{
     background-color: #585555;
 }

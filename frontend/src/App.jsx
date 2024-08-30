@@ -14,6 +14,9 @@ import CreatePost from "./component/CreatePost"
 import postAtom from "./atoms/postsAtom"
 import ChatPage from "./pages/ChatPage"
 import { SettingsPage } from "./pages/SettingsPage"
+import EmailVerificationPage from "./component/EmailVerificationPage"
+import ForgotPasswordPage from "./component/ForgotPasswordPage"
+import ResetPasswordPage from "./component/ResetPasswordPage"
 
 
 function App() {
@@ -35,7 +38,10 @@ function App() {
         <Routes>
           <Route path="/" element={user ? <HomePage /> : <Navigate to="/auth" />} />
           <Route path="/auth" element={!user ? <AuthPage /> : <Navigate to="/" />} />
+          <Route path="/verify-email" element={!user ? <EmailVerificationPage /> : <Navigate to="/" />} />
           <Route path="/update" element={user ? <UpdateProfilePage /> : <Navigate to="/auth" />} />
+          <Route path='/forgot-password' element={!user ? <ForgotPasswordPage /> : <Navigate to="/auth" />} />
+          <Route path='/reset-password/:token' element={!user ? <ResetPasswordPage /> : <Navigate to="/auth" />} />
 
 
 

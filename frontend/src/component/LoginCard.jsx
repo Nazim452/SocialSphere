@@ -23,12 +23,14 @@ import { useSetRecoilState } from "recoil";
 import authScreenAtom from "../atoms/authAtom";
 import useShowToast from "../hooks/useShowToast";
 import userAtom from "../atoms/userAtom";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginCard() {
 	const [showPassword, setShowPassword] = useState(false);
 	const setAuthScreen = useSetRecoilState(authScreenAtom);
 	const setUser = useSetRecoilState(userAtom);
 	const [loading, setLoading] = useState(false);
+	const navigate = useNavigate();
 
 	const [inputs, setInputs] = useState({
 		username: "",
@@ -127,6 +129,14 @@ export default function LoginCard() {
 								Don&apos;t have an account?{" "}
 								<Link color={"blue.400"} onClick={() => setAuthScreen("signup")}>
 									Sign up
+								</Link>
+							</Text>
+						</Stack>
+						<Stack pt={6}>
+							<Text align={"center"}>
+								Forgot Password{" "}
+								<Link color={"blue.400"} onClick={() => navigate("/forgot-password")}>
+									Forgot Password
 								</Link>
 							</Text>
 						</Stack>

@@ -1,5 +1,5 @@
 import express from "express";
-import { followUnfollowUser, freezeAccount, getAlluser, getSuggestedUsers, getUserProfile, loginUser, logout, signupUser, updateUser } from "../controllers/userController.js";
+import { followUnfollowUser, forgotPassword, freezeAccount, getAlluser, getSuggestedUsers, getUserProfile, loginUser, logout, resetPassword, signupUser, updateUser, verifyEmail } from "../controllers/userController.js";
 import protectRoute from "../middlewares/protectRoute.js";
 
 
@@ -10,6 +10,10 @@ router.get("/profile/:query",getUserProfile)
 router.get("/suggested", protectRoute, getSuggestedUsers);
 router.put("/freeze", protectRoute, freezeAccount);
 router.post("/signup",signupUser)
+router.post("/verify-email",verifyEmail)
+router.post('/forgot-password', forgotPassword)
+router.post('/reset-password/:token', resetPassword)
+
 router.post("/login",loginUser)
 router.post("/logout",logout)
 //id of user

@@ -2,11 +2,12 @@ import User from "../model/userModel.js";
 import bcrypt from 'bcryptjs'
 // import generateTokenAndSetCookies from "../utils/helpers/generateTokenANdSetCookie.js";
 import generateTokenAndSetCookies from "../utils/helpers/genTokenSetCookie.js";
+import crypto from "crypto";
 
 import {v2 as cloudinary} from 'cloudinary';
 import mongoose from "mongoose";
 import Post from "../model/postModel.js";
-
+import { sendPasswordResetEmail, sendResetSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from "../mailtrap/emails.js";
 
 
 export const signupUser = async (req, res) => {
@@ -19,17 +20,21 @@ export const signupUser = async (req, res) => {
 		}
 		const salt = await bcrypt.genSalt(10);
 		const hashedPassword = await bcrypt.hash(password, salt);
+		const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
 
 		const newUser = new User({
 			name,
 			email,
 			username,
 			password: hashedPassword,
+			verificationToken,
+			verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
 		});
 		await newUser.save();
 
+		await sendVerificationEmail(newUser.email, verificationToken);
 		if (newUser) {
-			generateTokenAndSetCookies(newUser._id, res);
+		
 
 			res.status(201).json({
 				_id: newUser._id,
@@ -44,7 +49,7 @@ export const signupUser = async (req, res) => {
 		}
 	} catch (err) {
 		res.status(500).json({ error: err.message });
-		console.log("Error in signupUser: ", err.message);
+		console.log("Error in signupUser: ", err);
 	}
 };
 
@@ -69,6 +74,7 @@ export   const loginUser = async (req, res) => {
 		}
 
         generateTokenAndSetCookies(user._id, res);
+		user.lastLogin = new Date();
 
 		res.status(200).json({
 			_id: user._id,
@@ -84,7 +90,113 @@ export   const loginUser = async (req, res) => {
 	}
 };
 
+export const verifyEmail = async (req, res) => {
+	try {
+		const {code} = req.body;
 
+		const user = await User.findOne({
+			verificationToken:code,
+			// Ensuring token not expired
+			verificationTokenExpiresAt:{$gt:Date.now()}
+		})
+
+		if(!user){
+			return res.status(403).send({success:false, message:"Invalid or expired verfication Code"})
+				
+		}
+		generateTokenAndSetCookies(user._id, res);
+		user.isVerified =true
+		user.verificationToken = undefined,
+		user.verificationTokenExpiresAt=undefined,
+		await user.save()
+		
+
+		return res.status(200).send({
+			success: true,
+			message:"Email Verified Successfully",
+			_id: user._id,
+			name: user.name,
+			email: user.email,
+			username: user.username,
+			bio: user.bio,
+			profilePic: user.profilePic,
+		})
+	} catch (error) {
+		console.log("Error While Verifying Email", error);
+		return res.status(500).send({
+		success:false,
+		error:error.message
+		
+		})
+		
+		
+	}
+}
+
+
+export const forgotPassword =async(req,res)=>{
+	try {
+		const {email} = req.body
+
+		const user = await User.findOne({ email: email})
+		if(!user){
+			return res.status(404).json({ success: false, message:"Email not found"})
+		}
+		// Genrerate reset token
+
+		const resetToken = crypto.randomBytes(20).toString("hex");
+		const resetTokenExpiresAt = Date.now() + 1*60*60*1000;//1hr
+
+		user.resetPasswordToken = resetToken;
+		user.resetPasswordExpiresAt = resetTokenExpiresAt;
+		await user.save();
+
+		// send mail
+		sendPasswordResetEmail(user.email,`http://localhost:3000/reset-password/${resetToken}`)
+		res.status(200).json({ success: true, message: "Password reset link sent to your email" });
+
+		
+	} catch (error) {
+		console.log("Error in forgotPassword ", error);
+		res.status(400).json({ success: false,
+			 error: error,
+			 message:"Error in forgotPassword",
+			 mainMeesage:error.message
+
+			});
+
+		
+	}
+}
+
+export const resetPassword = async(req, res) => {
+	const {token} = req.params;
+	const {password}  = req.body;
+
+	const user = await User.findOne({
+		resetPasswordToken: token,
+		resetPasswordExpiresAt:{$gt:Date.now()},
+	})
+	if(!user) {
+		return res.status(400).json({
+			success: false,
+			message: 'Invalid or expired token'
+		})
+	}
+	// Update hashed Password in mongoDB
+	const salt = await bcrypt.genSalt(10);
+	const hashPassword = await bcrypt.hash(password, salt);
+	user.password = hashPassword;
+	user.resetPasswordToken = undefined;
+	user.resetPasswordExpiresAt = undefined;
+
+	await user.save();
+
+	await sendResetSuccessEmail(user.email)
+	res.status(200).json({ success: true, message: "Password reset Successfully" });
+
+
+}
 
 
 

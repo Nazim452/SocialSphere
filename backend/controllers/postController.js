@@ -202,7 +202,7 @@ export const getFeedPost = async (req, res) => {
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ error: "User not found" });
 
-        const following = user.following; //find the following of the user
+        const following = user?.following; //find the following of the user
         const feedPost = await Post.find({ postedBy: { $in: following } });
         res.status(200).json(feedPost);
 
