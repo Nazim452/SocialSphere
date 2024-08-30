@@ -29,6 +29,7 @@ const LogoutButton = () => {
         showToast("Error", data.error, "error");
         return;
       }
+      showToast("Success", "Logout Successfully", "success");
 
       setUser(null);
       localStorage.removeItem("user-threads");
