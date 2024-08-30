@@ -1,13 +1,13 @@
 # SocialSphere
 
 
-
+for development mode - 
 sendPasswordResetEmail(user.email,`http://localhost:3000/reset-password/${resetToken}`)
 
 
-for development mode - remove - http://localhost:3000
 
-
+for production mode - 
+sendPasswordResetEmail(user.email,`https://socialspherenazim.onrender.com/reset-password/${resetToken}`)
 
 
 
